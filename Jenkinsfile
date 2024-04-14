@@ -9,6 +9,12 @@ pipeline {
             git branch: 'main', url: 'https://github.com/ooghenekaro/Petclinic-tomcat-deploy.git'
             }
         }
+        stage('Validate') {
+            steps {
+               echo "validating our maven build" 
+               sh "mvn clean validate"
+            }
+        }
       stage('Test') {
             steps {
                echo "running test on our maven build" 
