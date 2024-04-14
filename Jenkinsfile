@@ -1,13 +1,11 @@
+@library ('march-cohort-jenkins-lib')_
 pipeline {
     agent {
         label "linux-agent"
     }
     stages {
         stage('Git Checkout') {
-            steps {
-             echo 'Checking out our code'
-            git branch: 'main', url: 'https://github.com/ooghenekaro/Petclinic-tomcat-deploy.git'
-            }
+         gitCheckout()
         }
        stage ('Compile') {
                         steps {
