@@ -5,7 +5,9 @@ pipeline {
     }
     stages {
         stage('Git Checkout') {
+            steps {
          gitCheckout()
+            }
         }
        stage ('Compile') {
                         steps {
