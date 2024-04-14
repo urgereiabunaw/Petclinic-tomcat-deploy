@@ -43,10 +43,9 @@ pipeline {
                         id: 'userInput',
                         message: 'Proceed with deployment?',
                         parameters: [
-                            choice(
-                                choices: ['Yes', 'No'],
-                                description: 'Approve or deny the deployment'
-                            )
+                            [$class: 'ChoiceParameterDefinition', 
+                            choices: ['Yes', 'No'], 
+                            description: 'Approve or deny the deployment']
                         ]
                     )
                     
