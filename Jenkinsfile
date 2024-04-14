@@ -1,4 +1,4 @@
-@library ('march-cohort-jenkins-lib')_
+@Library('march-cohort-jenkins-lib')_
 pipeline {
     agent {
         label "linux-agent"
