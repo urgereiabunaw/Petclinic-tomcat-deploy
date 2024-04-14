@@ -35,6 +35,30 @@ pipeline {
                sh "mvn clean install"
             }
         }
+     stage('Approval') {
+            steps {
+                script {
+                    // Input step for approval
+                    def userInput = input(
+                        id: 'userInput',
+                        message: 'Proceed with deployment?',
+                        parameters: [
+                            choice(
+                                choices: ['Yes', 'No'],
+                                description: 'Approve or deny the deployment'
+                            )
+                        ]
+                    )
+                    
+                    // Check user input
+                    if (userInput == 'Yes') {
+                        echo 'Deployment approved. Continuing...'
+                    } else {
+                        error 'Deployment denied. Aborting...'
+                    }
+                }
+            }
+        }
     
     stage('Deploy') {
             steps {
