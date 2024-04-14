@@ -35,31 +35,10 @@ pipeline {
                sh "mvn clean install"
             }
         }
-     stage('Approval') {
-            steps {
-                script {
-                    // Input step for approval
-                    def userInput = input(
-                        id: 'userInput',
-                        message: 'Proceed with deployment?',
-                        parameters: [
-                            [$class: 'ChoiceParameterDefinition', 
-                            choices: ['Yes', 'No'], 
-                            description: 'Approve or deny the deployment']
-                        ]
-                    )
-                    
-                    // Check user input
-                    if (userInput == 'Yes') {
-                        echo 'Deployment approved. Continuing...'
-                    } else {
-                        error 'Deployment denied. Aborting...'
-                    }
-                }
-            }
+        timeout(time: 8, unit: "MINUTES") {
+        input message: 'Can i deploy to prod ?', parameters: [choice(choices: ['Yes', 'No'], name: 'Prod-approval')], submitter: 'Anil-admin'
         }
-    
-    stage('Deploy') {
+        stage('Deploy') {
             steps {
                 echo "Deploying our war file into our tomcat prod server"
                sshagent(['tomcat-pipeline']) {
