@@ -1,0 +1,33 @@
+pipeline {
+
+    agent any
+  
+    stages {
+       stage ('Compile') {
+                        steps {
+                echo "running compile on our maven build" 
+                sh "mvn compile"
+              }
+          }
+        stage('Validate') {
+            steps {
+              echo "running validate on our maven build"
+               sh "mvn validate"
+            }
+        }
+
+      stage('Test') {
+            steps {
+              echo "running test on our maven build"
+               sh "mvn test"
+            }
+        }
+       stage('Build') {
+            steps {
+                echo "packagiing maven build"
+                sh "mvn install"
+            }
+        }
+
+    }
+}
