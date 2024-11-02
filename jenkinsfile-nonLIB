@@ -3,6 +3,13 @@ pipeline {
     agent any
   
     stages {
+
+      stage('SCM Checkout') {
+            steps{
+           git branch: 'main', url: 'https://github.com/ooghenekaro/Petclinic-tomcat-deploy.git'
+            }
+        }
+
        stage ('Compile') {
                         steps {
                 echo "running compile on our maven build" 
