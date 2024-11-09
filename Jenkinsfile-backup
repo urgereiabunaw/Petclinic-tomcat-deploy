@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+    
+    
+        stages {
+        stage('SCM Checkout') {
+            steps{
+           git branch: 'main', url: 'https://github.com/ooghenekaro/Petclinic-tomcat-deploy.git'
+            }
+        }
+
+       stage ('Compile') {
+                        steps {
+                echo "running compile on our maven build for our awesome java app" 
+                sh "mvn compile"
+              }
+          }
+        stage('Validate') {
+            steps {
+              echo "running validate on our maven build"
+               sh "mvn validate"
+            }
+        }
+
+      stage('Test') {
+            steps {
+              echo "running test on our maven build"
+               sh "mvn test"
+            }
+        }
+       stage('Build') {
+            steps {
+                echo "packagiing maven build"
+                sh "mvn install"
+            }
+        }
+        stage('Deploy to DEV') {
+            steps {
+                echo "Deploying our war file into our tomcat dev server"
+                sshagent(['tomcat']) {
+                     sh "scp -o StrictHostKeyChecking=no target/petclinic.war tomcat@18.130.34.244:/opt/tomcat/webapps"
+                }
+            }
+        }  
+        stage('Deploy to Stage') {
+            steps {
+                echo "Deploying our war file into our tomcat Stage server"
+
+                timeout(time: 8, unit: "MINUTES") {
+input message: 'Can i deploy to stage ?', parameters: [choice(choices: ['Yes', 'No'], name: 'Stage-approval')], submitter: 'Karo-admin', submitterParameter: 'admin'        }
+                sshagent(['tomcat']) {
+                     sh "scp -o StrictHostKeyChecking=no target/petclinic.war tomcat@18.130.34.244:/opt/tomcat/webapps"
+                }
+            }
+        }    
+        
+        stage('Deploy to Prod') {
+            steps {
+                echo "Deploying our war file into our tomcat prod server"
+
+                timeout(time: 8, unit: "MINUTES") {
+input message: 'Can i deploy to prod ?', parameters: [choice(choices: ['Yes', 'No'], name: 'Prod-approval')], submitter: 'Anil-admin', submitterParameter: 'admin'        }
+                sshagent(['tomcat']) {
+                     sh "scp -o StrictHostKeyChecking=no target/petclinic.war tomcat@18.130.34.244:/opt/tomcat/webapps"
+                }
+            }
+        }    
+    }
+}
