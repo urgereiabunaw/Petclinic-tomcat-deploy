@@ -1,3 +1,4 @@
+@Library('sept-shared-lib')_
 pipeline {
     agent any
     
@@ -5,33 +6,31 @@ pipeline {
         stages {
         stage('SCM Checkout') {
             steps{
-           git branch: 'main', url: 'https://github.com/ooghenekaro/Petclinic-tomcat-deploy.git'
+             gitCheckout()
             }
         }
 
        stage ('Compile') {
                         steps {
-                echo "running compile on our maven build for our awesome java app" 
-                sh "mvn compile"
+                mvnCompile()
               }
           }
         stage('Validate') {
-            steps {
-              echo "running validate on our maven build"
-               sh "mvn validate"
+            steps { 
+             mvnValidate()
+  
             }
         }
 
       stage('Test') {
             steps {
-              echo "running test on our maven build"
-               sh "mvn test"
+              mvnTest()
             }
         }
        stage('Build') {
-            steps {
-                echo "packagiing maven build"
-                sh "mvn install"
+            steps { 
+ 
+             mvnInstall()
             }
         }
         stage('Deploy to DEV') {
