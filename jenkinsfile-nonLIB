@@ -11,7 +11,7 @@ pipeline {
 
        stage ('Compile') {
                         steps {
-                echo "running compile on our maven build" 
+                echo "running compile on our maven build for our awesome java app" 
                 sh "mvn compile"
               }
           }
