@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+    commands:
+      - echo "Using Java 17..."
+      - java -version
+      - echo "Using Maven..."
+      - mvn --version
+  build:
+    commands:
+      - echo "Building Spring Petclinic WAR..."
+      - mvn clean package -DskipTests
+artifacts:
+  files:
+    - target/*.war
